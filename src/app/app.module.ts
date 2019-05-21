@@ -15,6 +15,8 @@ import { AppListItemComponent } from './app-list/app-list-item/app-list-item.com
 import { FilterOptionsComponent } from './filter-options/filter-options.component';
 import { DescriptionComponent } from './description/description.component';
 import { DataService } from './data-service/data.service';
+import { FilterCheckboxesComponent } from './filter-options/filter-checkboxes/filter-checkboxes.component';
+import { FilterSelectsComponent } from './filter-options/filter-selects/filter-selects.component';
 
 const providers: Provider[] = [
   DnnInterceptor,
@@ -32,6 +34,8 @@ if (!environment.production) {
     AppListItemComponent,
     FilterOptionsComponent,
     DescriptionComponent,
+    FilterCheckboxesComponent,
+    FilterSelectsComponent,
   ],
   imports: [
     BrowserModule,

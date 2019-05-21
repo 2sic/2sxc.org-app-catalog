@@ -1,0 +1,11 @@
+
+<ng-container *ngFor="let checkboxGroup of checkboxGroups | async">
+  <h4>{{(titlePrefix + ' ' + checkboxGroup.category).toUpperCase()}}</h4>
+  <div class="filter-checkbox-container">
+
+    <ng-container *ngFor="let option of checkboxGroup?.options">
+      <mat-checkbox [value]="option?.id" [checked]="option?.value">{{option?.label}}</mat-checkbox>
+    </ng-container>
+
+  </div>
+</ng-container>
