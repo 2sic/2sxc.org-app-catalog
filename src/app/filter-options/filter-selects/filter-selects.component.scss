@@ -39,3 +39,14 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .filter-select-container {
+    flex-flow: column;
+  }
+  .filter-select {
+    &:not(.firstOrLast) {
+      margin: 0 !important;
+    }
+  }
+}
