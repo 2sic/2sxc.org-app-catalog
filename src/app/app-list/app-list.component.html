@@ -1,3 +1,8 @@
-<p>
-  app-list works!
-</p>
+
+<mat-card class="mat-elevation-z24">
+
+  <ng-container *ngFor="let app of appList | async; last as last; first as first;">
+    <app-list-item [app]="app" class="list-item" [ngClass]="{'last-item': last, 'first-item': first}"></app-list-item>
+  </ng-container>
+
+</mat-card>

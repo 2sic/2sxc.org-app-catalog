@@ -1,3 +1,18 @@
-<p>
-  app-list-item works!
-</p>
+
+<div class="app-image">
+  <img src="https://via.placeholder.com/100">
+</div>
+
+<div class="app-description">
+  <div class="app-title-line">
+    <h4 class="title">{{app?.name}}</h4>
+    <span class="release-type" [ngClass]="app?.type">{{app?.type}}</span>
+  </div>
+  <p>{{app?.description}}</p>
+</div>
+
+<div class="app-taggs">
+  <ng-container *ngFor="let tag of app?.tags">
+    <span class="tag">{{tag}}</span>
+  </ng-container>
+</div>

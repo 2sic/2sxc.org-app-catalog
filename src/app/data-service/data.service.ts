@@ -72,4 +72,18 @@ export class DataService {
 
     return from([dummyData]);
   }
+
+  public getAppList() {
+    const dummyData = [
+      {
+        thumpnail: 'https://via.placeholder.com/100',
+        type: 'new',
+        name: 'Test Title',
+        description: 'News - Pro 3.1 / H5 A powerful news app with all the features you expect and more, for bootstrap 3 and 4. A powerful news app with all the features you expect and more, for bootstrap.',
+        tags: ['tag-1', 'tag-2'],
+      },
+    ];
+
+    return from([dummyData]);
+  }
 }
