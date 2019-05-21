@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../data-service/data.service';
 
 @Component({
   selector: 'app-description',
@@ -10,11 +11,14 @@ export class DescriptionComponent implements OnInit {
   public title: string = null;
   public description: string = null;
 
-  constructor() { }
+  constructor(private data: DataService) { }
 
   ngOnInit() {
-    this.title = 'App Catalog';
-    this.description = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est';
+    this.data.getDescription()
+      .subscribe(values => {
+        this.title = values.title;
+        this.description = values.description;
+      });
   }
 
 }
