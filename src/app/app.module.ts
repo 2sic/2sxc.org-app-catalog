@@ -7,7 +7,6 @@ import { DnnDevSettings } from './dev/dnn-dev-settings';
 
 import { MatFormFieldModule, MatCheckboxModule, MatSelectModule, MatCardModule, MatDividerModule, MatChipsModule } from '@angular/material';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppListComponent } from './app-list/app-list.component';
@@ -39,7 +38,6 @@ if (!environment.production) {
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     MatFormFieldModule,
