@@ -5,6 +5,8 @@ import { environment } from '../environments/environment';
 import { DnnInterceptor, RuntimeSettings } from '@2sic.com/dnn-sxc-angular';
 import { DnnDevSettings } from './dev/dnn-dev-settings';
 
+import { MatFormFieldModule, MatCheckboxModule, MatSelectModule, MatCardModule, MatDividerModule, MatChipsModule } from '@angular/material';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,6 +38,12 @@ if (!environment.production) {
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatCardModule,
+    MatDividerModule,
+    MatChipsModule,
   ],
   providers,
   bootstrap: [AppComponent]
