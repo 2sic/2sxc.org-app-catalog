@@ -11,7 +11,7 @@ set.path = 'http://2sxc2019a.60.2sic.net/Apps-Catalog/DesktopModules/2sxc/API/';
 
 // The module and tab id to get data from
 set.moduleId = 1199;
-set.tabId = 2926;
+set.tabId = 470;
 
 // In most of the cases, you won't need to set this as it's the same as the module id
 // set.contentBlockId = 0;
