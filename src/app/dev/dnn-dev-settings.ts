@@ -7,7 +7,7 @@ set.ignoreMissingServicesFramework = true;
 
 // The base path to your DNN environment's API
 // In most of the cases, this is http://[domain]/DesktopModules/2sxc/API/
-set.path = 'http://2sxc2019b.60.2sic.net/Apps-Catalog/DesktopModules/2sxc/API/';
+set.path = 'http://2sxc2019b.60.2sic.net/DesktopModules/2sxc/API/';
 
 // The module and tab id to get data from
 set.moduleId = 1199;
@@ -20,9 +20,9 @@ set.tabId = 470;
 // set.antiForgeryToken = 'ThisIsaTestAntiForgeryToken';
 
 // Override the app name - only needed if you do not set module and tabid values
-// set.appNameInPath = 'app-dnn-sxc-angular-dev'
+// set.appNameInPath = 'app-dnn-sxc-angular-dev';
 
 // Set this to send authenticated requests
-set.withCredentials = true;
+set.withCredentials = false;
 
 export const DnnDevSettings = set;
