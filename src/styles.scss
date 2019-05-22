@@ -30,8 +30,6 @@ $AppCatalog-theme: mat-light-theme($AppCatalog-primary, $AppCatalog-accent, $App
 
 html, body { height: 100%; }
 body {
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+  margin: 0;
   font-family: "Montserrat",sans-serif,-apple-system,BlinkMacSystemFont,Segoe UI,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
