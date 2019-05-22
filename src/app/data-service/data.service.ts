@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Data } from '@2sic.com/dnn-sxc-angular';
-import { Observable, from } from 'rxjs';
-import { FilterCategorys } from '../filter-options/filter-options.interfaces';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AppListItem, AppListItemTag, AppTypeIds } from '../app-list/app-list.interfaces';
+import { AppCatalogDescription } from '../description/description.intefaces';
 
 @Injectable()
 export class DataService {
@@ -10,80 +12,41 @@ export class DataService {
   constructor(
     private dnnData: Data,
     private http: HttpClient,
-  ) {
-    /*
-    this.dnnData
-      .content('AppList')
+  ) {}
+
+  public getDescription(): Observable<AppCatalogDescription[]> {
+    return this.dnnData
+      .content<AppCatalogDescription>('AppCatalogSettings')
       .get()
-      .subscribe(
-        result => console.log({result}),
-        error => console.log({error}),
-      );
-    */
+      ;
   }
 
-  public getDescription() {
-    const dummyData = [{
-      title: 'App Catalog',
-      description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est',
-    }];
-
-    return from(dummyData);
+  public getAppListTags(): Observable<AppListItemTag[]> {
+    return this.dnnData
+      .query< {Apps: Array<AppListItem>, Tags: Array<AppListItemTag>}>('AppList')
+      .get()
+      .pipe(map((result: {Apps: Array<AppListItem>, Tags: Array<AppListItemTag>}) => result.Tags))
+      ;
   }
 
-  public getFilterCategorys(): Observable<FilterCategorys[]> {
-    const dummyData = [
-      {
-        category: 'release-type',
-        options: [
-          {id: 0, label: 'Show All', value: true},
-          {id: 1, label: 'Feature-Demo', value: false},
-          {id: 2, label: 'Template App for Getting', value: false},
-          {id: 3, label: 'Stable / For Use in Live Sites', value: false},
-          {id: 4, label: 'Tutorial', value: false},
-          {id: 5, label: 'Hide all old Apps', value: true},
-        ],
-      },
-      {
-        category: 'complexity',
-        options: [
-          {id: 0, label: 'Show All', value: true},
-          {id: 1, label: 'test 1', value: false},
-          {id: 2, label: 'test 2', value: false},
-        ],
-      },
-      {
-        category: 'technology',
-        options: [
-          {id: 0, label: 'Show All', value: true},
-          {id: 1, label: 'test 1', value: false},
-          {id: 2, label: 'test 2', value: false},
-        ],
-      },
-      {
-        category: 'tag',
-        options: [
-          {id: 0, label: 'Show All', value: true},
-          {id: 1, label: 'test 1', value: false},
-          {id: 2, label: 'test 2', value: false},
-        ],
-      },
-    ] as FilterCategorys[];
+  public getAppList(): Observable<AppListItem[]> {
 
-    return from([dummyData]);
-  }
+    return this.dnnData
+      .content<AppListItem>('App')
+      .get()
+      .pipe(map((appList: AppListItem[]) => {
+        appList.map((app: AppListItem) => {
+            const isTop = app.Tags.find(t => t.Id === AppTypeIds.top);
+            const isStabel = app.Tags.find(t => t.Id === AppTypeIds.stable);
 
-  public getAppList() {
-    const dummyData = [
-      {
-        thumpnail: 'https://via.placeholder.com/100',
-        type: 'new',
-        name: 'Test Title',
-        description: 'News - Pro 3.1 / H5 A powerful news app with all the features you expect and more, for bootstrap 3 and 4. A powerful news app with all the features you expect and more, for bootstrap.',
-        tags: ['tag-1', 'tag-2'],
-      },
-    ];
+            app.Type = isTop ? isTop
+              : isStabel ? isStabel
+                : null;
 
-    return from([dummyData]);
+            return app;
+        });
+        return appList;
+      }))
+      ;
   }
 }
