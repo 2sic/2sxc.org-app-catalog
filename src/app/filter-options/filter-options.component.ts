@@ -26,15 +26,6 @@ export class FilterOptionsComponent implements OnInit {
       this.filterService.filterGroups
         .pipe(
           map((groups: FilterCategoryGroup[]) => groups.filter(group => checkboxCategorys.includes(group.Category))),
-          map((groups: FilterCategoryGroup[]) => groups.map(group => {
-            const checkboxOrder = ['Stable / For Use in Live Sites', 'Template App for Getting Started', 'Tutorial', 'Feature-Demo'];
-            const ordered: FilterOption[] = checkboxOrder.map(
-              (tag: string) => group.Options.find( (option: FilterOption) => option.Tag ===  tag)
-            );
-
-            group.Options = ordered;
-            return group;
-          }))
         );
 
     const selectsCategorys = ['Complexity', 'Technology'];

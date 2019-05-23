@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { FilterCategoryGroup, FilterOption } from '../filter-options.interfaces';
 import { FormGroup, FormControl } from '@angular/forms';
 import { FilterOptionsService } from '../fiter-options.services';
+import { map } from 'rxjs/operators';
+import { CheckboxIds } from '../filter-options.enums';
 
 @Component({
   selector: 'app-filter-checkboxes',
@@ -14,49 +16,69 @@ export class FilterCheckboxesComponent implements OnInit {
   @Input() titlePrefix: string = null;
   @Input() checkboxGroups: Observable<FilterCategoryGroup[]> = new Observable<FilterCategoryGroup[]>();
 
-  private fixKeys = {showAll: 'all', old: 'old'};
   public checkboxForm: FormGroup = new FormGroup({
-    [this.fixKeys.showAll]: new FormControl(true),
+    all: new FormControl(true),
   });
 
-  constructor(private filterService: FilterOptionsService) {}
+  constructor(public filterService: FilterOptionsService) {}
 
   ngOnInit() {
-    this.checkboxGroups.subscribe((groups: FilterCategoryGroup[]) => {
+
+    this.checkboxGroups
+      .pipe(
+        map((groups: FilterCategoryGroup[]) => groups.map((group: FilterCategoryGroup) => {
+          const checkboxOrderIds = [
+            CheckboxIds.stabel,
+            CheckboxIds.template,
+            CheckboxIds.tutorial,
+            CheckboxIds.featueDemo,
+            CheckboxIds.old,
+          ];
+
+          const orderedOptions = checkboxOrderIds.map( (id: number) => group.Options.find((option: FilterOption) => option.Id === id) );
+          group.Options = orderedOptions;
+          return group;
+        })),
+        map((groups: FilterCategoryGroup[]) => groups.map((group: FilterCategoryGroup) => {
+          group.Options.map( (option: FilterOption) => {
+            if (option.Id === CheckboxIds.old) {
+              option.ShowApps = false;
+              option.Tooltip = option.Tag;
+              option.Tag = 'Hide all old Apps';
+            }
+
+            if (option.Id === CheckboxIds.stabel) {
+              option.Tooltip = option.Tag;
+              option.Tag = 'Stable';
+            }
+
+            if (option.Id === CheckboxIds.template) {
+              option.Tooltip = option.Tag;
+              option.Tag = 'Template';
+            }
+
+            return option;
+          });
+          return group;
+        })),
+      )
+      .subscribe((groups: FilterCategoryGroup[]) => {
       groups.forEach((group: FilterCategoryGroup) => group.Options.forEach(
         (option: FilterOption) => {
-
-          if (option.Title === this.fixKeys.old) {
-            option.Tag = 'Hide all old Apps';
-            option.ShowApps = false;
-            this.filterService.setFilter(option);
-            this.checkboxForm.addControl(option.Title, new FormControl(true));
-          } else {
-            this.checkboxForm.addControl(option.Title, new FormControl(false));
-          }
+          this.checkboxForm.addControl(option.Title, new FormControl(!option.ShowApps));
       }));
     });
   }
 
-  public fixLabel(option: FilterOption) {
-    if (option.Tag === 'Stable / For Use in Live Sites') {
-      option.Tag = 'Stable';
-    } else if (option.Tag === 'Template App for Getting Started') {
-      option.Tag = 'Template';
-    }
-
-    return option.Tag;
-  }
-
   public areSomeCheckboxesSelected() {
     return Object.keys(this.checkboxForm.controls)
-      .filter(key => !Object.values(this.fixKeys).includes(key) )
+      .filter(key => !['all', 'old'].includes(key) )
       .some(key => this.checkboxForm.get(key).value);
   }
 
   public showAll() {
     Object.keys(this.checkboxForm.controls)
-      .filter(key => !Object.values(this.fixKeys).includes(key) )
+      .filter(key => !['all', 'old'].includes(key) )
       .forEach(key => {
         const filter = this.filterService.selectedFilters.find(f => f.Title === key);
         this.checkboxForm.get(key).setValue(false);
