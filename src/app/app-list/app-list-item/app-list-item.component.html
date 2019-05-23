@@ -8,7 +8,7 @@
     <a href="apps/app/{{app?.UrlKey}}">{{app?.Name}}</a>
     <span
       class="type"
-      [ngClass]="{'stable': app?.Type?.Id === appTypeIds.stable, 'top': app?.Type?.Id === appTypeIds.top, 'old': app?.Type?.Id === appTypeIds.old}"
+      [ngClass]="{'stable': app?.Type?.Id === appTypeIds.stable, 'top': app?.Type?.Id === appTypeIds.top, 'new': app?.Type?.Id === appTypeIds.new, 'old': app?.Type?.Id === appTypeIds.old}"
       *ngIf="!!app?.Type"
     >{{app?.Type?.Title}}</span>
   </h4>

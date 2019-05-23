@@ -43,6 +43,10 @@
         white-space: nowrap;
         vertical-align: middle;
 
+        &.new {
+          background: #E9AB00;
+        }
+
         &.top {
           background: #E9AB00;
         }
