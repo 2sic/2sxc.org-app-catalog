@@ -1,11 +1,9 @@
-
-export interface FilterOption {
-  id: number;
-  label: string;
-  value: boolean;
+import { AppListItemTag } from '../app-list/app-list.interfaces';
+export interface FilterOption extends AppListItemTag {
+  ShowApps: boolean;
 }
 
-export interface FilterCategorys {
-  category: string;
-  options: Array<FilterOption>;
+export interface FilterCategoryGroup {
+  Category: string;
+  Options: Array<any>;
 }
