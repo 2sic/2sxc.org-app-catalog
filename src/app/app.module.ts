@@ -7,7 +7,15 @@ import { DnnDevSettings } from './dev/dnn-dev-settings';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatFormFieldModule, MatCheckboxModule, MatSelectModule, MatCardModule, MatDividerModule, MatChipsModule } from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatCheckboxModule,
+  MatSelectModule,
+  MatCardModule,
+  MatDividerModule,
+  MatChipsModule,
+  MatTooltipModule,
+} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -52,6 +60,7 @@ if (!environment.production) {
     MatCardModule,
     MatDividerModule,
     MatChipsModule,
+    MatTooltipModule,
   ],
   providers,
   bootstrap: [AppComponent]

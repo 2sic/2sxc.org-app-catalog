@@ -14,7 +14,7 @@ export class FilterCheckboxesComponent implements OnInit {
   @Input() titlePrefix: string = null;
   @Input() checkboxGroups: Observable<FilterCategoryGroup[]> = new Observable<FilterCategoryGroup[]>();
 
-  private fixKeys = {showAll: 'all', old: 'old'};
+  private fixKeys = {showAll: 'all', old: 'old', stable: 'Stable / For Use in Live Sites'};
   public checkboxForm: FormGroup = new FormGroup({
     [this.fixKeys.showAll]: new FormControl(true),
   });
@@ -25,6 +25,7 @@ export class FilterCheckboxesComponent implements OnInit {
     this.checkboxGroups.subscribe((groups: FilterCategoryGroup[]) => {
       groups.forEach((group: FilterCategoryGroup) => group.Options.forEach(
         (option: FilterOption) => {
+
           if (option.Title === this.fixKeys.old) {
             option.Tag = 'Hide all old Apps';
             option.ShowApps = false;
@@ -35,6 +36,16 @@ export class FilterCheckboxesComponent implements OnInit {
           }
       }));
     });
+  }
+
+  public fixLabel(option: FilterOption) {
+    if (option.Tag === 'Stable / For Use in Live Sites') {
+      option.Tag = 'Stable';
+    } else if (option.Tag === 'Template App for Getting Started') {
+      option.Tag = 'Template';
+    }
+
+    return option.Tag;
   }
 
   public areSomeCheckboxesSelected() {

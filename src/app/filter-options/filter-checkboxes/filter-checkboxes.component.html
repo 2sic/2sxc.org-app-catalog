@@ -7,7 +7,9 @@
       <mat-checkbox [checked]="!areSomeCheckboxesSelected()" [disabled]="!areSomeCheckboxesSelected()" (change)="showAll($event?.checked)">Show all</mat-checkbox>
 
       <ng-container *ngFor="let option of checkboxGroup?.Options">
-        <mat-checkbox [formControlName]="option?.Title" (change)="toggelCheckbox(option, $event?.checked)">{{option?.Tag}}</mat-checkbox>
+        <mat-checkbox [formControlName]="option?.Title" (change)="toggelCheckbox(option, $event?.checked)" matTooltip="{{option?.Title}}">
+          {{fixLabel(option)}}
+        </mat-checkbox>
       </ng-container>
 
     </div>
