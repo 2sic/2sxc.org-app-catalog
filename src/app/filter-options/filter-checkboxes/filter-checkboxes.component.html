@@ -1,11 +1,16 @@
 
-<ng-container *ngFor="let checkboxGroup of checkboxGroups | async">
-  <h4>{{(titlePrefix + ' ' + checkboxGroup.category).toUpperCase()}}</h4>
-  <div class="filter-checkbox-container">
+<form [formGroup]="checkboxForm">
+  <ng-container *ngFor="let checkboxGroup of checkboxGroups | async">
+    <h4>{{(titlePrefix + ' ' + checkboxGroup.Category).toUpperCase()}}</h4>
+    <div class="filter-checkbox-container">
 
-    <ng-container *ngFor="let option of checkboxGroup?.options">
-      <mat-checkbox [value]="option?.id" [checked]="option?.value">{{option?.label}}</mat-checkbox>
-    </ng-container>
+      <mat-checkbox [checked]="!areSomeCheckboxesSelected()" [disabled]="!areSomeCheckboxesSelected()" (change)="showAll($event?.checked)">Show all</mat-checkbox>
 
-  </div>
-</ng-container>
+      <ng-container *ngFor="let option of checkboxGroup?.Options">
+        <mat-checkbox [formControlName]="option?.Title" (change)="toggelCheckbox(option, $event?.checked)">{{option?.Tag}}</mat-checkbox>
+      </ng-container>
+
+    </div>
+  </ng-container>
+</form>
+
