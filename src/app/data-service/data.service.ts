@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Data } from '@2sic.com/dnn-sxc-angular';
-import { Observable, from, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { AppListItem, AppListItemTag } from '../app-list/app-list.interfaces';
-import { AppTypeIds } from '../app-list/app-list.enums';
-import { AppCatalogDescription } from '../description/description.intefaces';
+
 
 @Injectable()
 export class DataService {
@@ -17,13 +14,6 @@ export class DataService {
     private dnnData: Data,
   ) {
     this.loadAppsAndTags();
-  }
-
-  public getDescription(): Observable<AppCatalogDescription[]> {
-    return this.dnnData
-      .content<AppCatalogDescription>('AppCatalogSettings')
-      .get()
-      ;
   }
 
   private loadAppsAndTags() {

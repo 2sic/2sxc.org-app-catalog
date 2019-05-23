@@ -22,7 +22,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppListComponent } from './app-list/app-list.component';
 import { AppListItemComponent } from './app-list/app-list-item/app-list-item.component';
 import { FilterOptionsComponent } from './filter-options/filter-options.component';
-import { DescriptionComponent } from './description/description.component';
 import { DataService } from './data-service/data.service';
 import { FilterCheckboxesComponent } from './filter-options/filter-checkboxes/filter-checkboxes.component';
 import { FilterSelectsComponent } from './filter-options/filter-selects/filter-selects.component';
@@ -44,7 +43,6 @@ if (!environment.production) {
     AppListComponent,
     AppListItemComponent,
     FilterOptionsComponent,
-    DescriptionComponent,
     FilterCheckboxesComponent,
     FilterSelectsComponent,
   ],
