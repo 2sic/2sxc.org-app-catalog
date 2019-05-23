@@ -20,9 +20,11 @@ set.tabId = 470;
 // set.antiForgeryToken = 'ThisIsaTestAntiForgeryToken';
 
 // Override the app name - only needed if you do not set module and tabid values
-// set.appNameInPath = 'app-dnn-sxc-angular-dev';
+set.appNameInPath = 'AppCatalog';
 
 // Set this to send authenticated requests
 set.withCredentials = false;
+
+set.addDnnHeaders = false;
 
 export const DnnDevSettings = set;
