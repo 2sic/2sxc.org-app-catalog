@@ -5,4 +5,9 @@
     <app-list-item [app]="app" class="list-item" [ngClass]="{'last-item': last, 'first-item': first}"></app-list-item>
   </ng-container>
 
+  <ng-container *ngIf="(appList | async)?.length === 0">
+    <p>No Apps for this selection</p>
+  </ng-container>
+
+
 </mat-card>
