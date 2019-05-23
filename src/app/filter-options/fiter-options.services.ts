@@ -63,7 +63,13 @@ export class FilterOptionsService {
 
   private createFilterGroups(tags: AppListItemTag[]): FilterCategoryGroup[] {
 
+    const ignoreTags = ['Beta'];
+
     return tags.reduce((groups: FilterCategoryGroup[], tag: AppListItemTag) => {
+
+      if (ignoreTags.includes(tag.Title)) {
+        return groups;
+      }
 
       const category = groups.find(group => group.Category === tag.Category);
       const option = this.createFilterOption(tag);
