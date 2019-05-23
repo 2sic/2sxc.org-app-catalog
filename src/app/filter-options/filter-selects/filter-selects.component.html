@@ -1,20 +1,24 @@
 
-<div class="filter-select-container">
-  <ng-container *ngFor="let selectGroup of selectGroups | async; first as first; last as last;">
+<form [formGroup]="selectForm">
+  <div class="filter-select-container">
+    <ng-container *ngFor="let selectGroup of selectGroups | async; first as first; last as last;">
 
-    <div class="filter-select" [ngClass]="{'firstOrLast': first || last}">
-      <h4>{{(titlePrefix + ' ' + selectGroup?.category).toUpperCase()}}</h4>
+      <div class="filter-select" [ngClass]="{'firstOrLast': first || last}">
+        <h4>{{(titlePrefix + ' ' + selectGroup?.Category).toUpperCase()}}</h4>
 
-      <mat-form-field appearance="outline">
-        <mat-select [value]="0" #test>
+        <mat-form-field appearance="outline">
+          <mat-select [value]="false" [formControlName]="selectGroup?.Category">
+            <mat-option [value]="false">Show all</mat-option>
 
-          <ng-container *ngFor="let option of selectGroup?.options">
-            <mat-option [value]="option?.id">{{option?.label}}</mat-option>
-          </ng-container>
+            <ng-container *ngFor="let option of selectGroup?.Options">
+              <mat-option [value]="option" (onSelectionChange)="handleFilterSelection($event)">{{option?.Tag}}</mat-option>
+            </ng-container>
 
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-  </ng-container>
-</div>
+    </ng-container>
+  </div>
+</form>
+
