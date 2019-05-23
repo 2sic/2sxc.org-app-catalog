@@ -14,7 +14,7 @@ export class FilterCheckboxesComponent implements OnInit {
   @Input() titlePrefix: string = null;
   @Input() checkboxGroups: Observable<FilterCategoryGroup[]> = new Observable<FilterCategoryGroup[]>();
 
-  private fixKeys = {showAll: 'all', old: 'old', stable: 'Stable / For Use in Live Sites'};
+  private fixKeys = {showAll: 'all', old: 'old'};
   public checkboxForm: FormGroup = new FormGroup({
     [this.fixKeys.showAll]: new FormControl(true),
   });
