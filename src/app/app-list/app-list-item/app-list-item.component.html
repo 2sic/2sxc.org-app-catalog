@@ -1,18 +1,22 @@
 
 <div class="app-image">
-  <img src="https://via.placeholder.com/100">
+  <img [src]="app?.Icon">
 </div>
 
 <div class="app-description">
-  <div class="app-title-line">
-    <h4 class="title">{{app?.name}}</h4>
-    <span class="release-type" [ngClass]="app?.type">{{app?.type}}</span>
-  </div>
-  <p>{{app?.description}}</p>
+  <h4 class="app-title">
+    {{app?.Name}}
+    <span
+      class="type"
+      [ngClass]="{'stable': app?.Type?.Id === appTypeIds.stable, 'top': app?.Type?.Id === appTypeIds.top, 'old': app?.Type?.Id === appTypeIds.old}"
+      *ngIf="!!app?.Type"
+    >{{app?.Type?.Title}}</span>
+  </h4>
+  <span [innerHTML]="app?.ShortDescription"></span>
 </div>
 
 <div class="app-taggs">
-  <ng-container *ngFor="let tag of app?.tags">
-    <span class="tag">{{tag}}</span>
+  <ng-container *ngFor="let Tag of app?.Tags">
+    <span class="tag">{{Tag?.Title}}</span>
   </ng-container>
 </div>

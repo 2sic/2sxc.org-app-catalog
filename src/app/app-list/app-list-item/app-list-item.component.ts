@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { AppTypeIds } from '../app-list.enums';
 
 @Component({
   selector: 'app-list-item',
@@ -7,6 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class AppListItemComponent {
 
-  @Input() app: any = null;
+  public appTypeIds = AppTypeIds;
 
+  @Input() app: any = null;
 }
