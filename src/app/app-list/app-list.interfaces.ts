@@ -13,4 +13,5 @@ export interface AppListItem {
   Name: string;
   Description: string;
   Tags: Array<AppListItemTag>;
+  UrlKey: string;
 }

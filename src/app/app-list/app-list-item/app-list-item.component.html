@@ -5,7 +5,7 @@
 
 <div class="app-description">
   <h4 class="app-title">
-    {{app?.Name}}
+    <a href="apps/app/{{app?.UrlKey}}">{{app?.Name}}</a>
     <span
       class="type"
       [ngClass]="{'stable': app?.Type?.Id === appTypeIds.stable, 'top': app?.Type?.Id === appTypeIds.top, 'old': app?.Type?.Id === appTypeIds.old}"

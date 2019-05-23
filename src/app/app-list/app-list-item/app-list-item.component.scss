@@ -22,36 +22,39 @@
     flex: 7 1 50%;
     line-height: 1.5;
     font-weight: 300;
-    max-width: 500px;
+    max-width: 600px;
+    padding-right: 30px;
 
     p {
       margin: 0;
     }
 
     .app-title {
-        margin: 0 20px 10px 0;
+      a{
+        margin-right: 10px;
+      }
 
-        .type {
-          color: white;
-          border-radius: 8px 0 8px 0;
-          padding: 2px 8px;
-          font-size: 12px;
-          font-weight: 400;
-          white-space: nowrap;
-          vertical-align: middle;
+      .type {
+        color: white;
+        border-radius: 8px 0 8px 0;
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 400;
+        white-space: nowrap;
+        vertical-align: middle;
 
-          &.top {
-            background: #E9AB00;
-          }
-
-          &.stable {
-            background: #05D6AC;
-          }
-
-          &.old {
-            background: #673300;
-          }
+        &.top {
+          background: #E9AB00;
         }
+
+        &.stable {
+          background: #05D6AC;
+        }
+
+        &.old {
+          background: #673300;
+        }
+      }
 
     }
   }
