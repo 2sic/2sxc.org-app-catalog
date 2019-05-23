@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data-service/data.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FilterCategoryGroup } from './filter-options.interfaces';
+import { FilterCategoryGroup, FilterOption } from './filter-options.interfaces';
 import { FilterOptionsService } from './fiter-options.services';
+import { AppListItem } from '../app-list/app-list.interfaces';
 
 @Component({
   selector: 'app-filter-options',
@@ -17,15 +18,24 @@ export class FilterOptionsComponent implements OnInit {
   public filterCheckboxes: Observable<FilterCategoryGroup[]> = null;
   public filterSelects: Observable<FilterCategoryGroup[]> = null;
 
-  constructor(private filterService: FilterOptionsService) { }
+  constructor(private filterService: FilterOptionsService) {}
 
   ngOnInit() {
     const checkboxCategorys = ['Release-Type'];
     this.filterCheckboxes =
       this.filterService.filterGroups
-        .pipe(map((groups: FilterCategoryGroup[]) => {
-          return groups.filter(group => checkboxCategorys.includes(group.Category));
-        }));
+        .pipe(
+          map((groups: FilterCategoryGroup[]) => groups.filter(group => checkboxCategorys.includes(group.Category))),
+          map((groups: FilterCategoryGroup[]) => groups.map(group => {
+            const checkboxOrder = ['Stable / For Use in Live Sites', 'Template App for Getting Started', 'Tutorial', 'Feature-Demo'];
+            const ordered: FilterOption[] = checkboxOrder.map(
+              (tag: string) => group.Options.find( (option: FilterOption) => option.Tag ===  tag)
+            );
+
+            group.Options = ordered;
+            return group;
+          }))
+        );
 
     const selectsCategorys = ['Complexity', 'Technology'];
     const tagCategory = checkboxCategorys.concat(selectsCategorys);
