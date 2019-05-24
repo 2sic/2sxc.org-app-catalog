@@ -4,11 +4,13 @@ export interface AppListItemTag {
   Title: string;
   Tag: string;
   Category: string;
+  Priority: number;
 }
 
 export interface AppListItem {
   Id: number;
   Type: AppListItemTag;
+  IsNew: boolean;
   Icon: string;
   Name: string;
   Description: string;

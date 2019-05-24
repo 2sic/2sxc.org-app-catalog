@@ -16,8 +16,8 @@ export class DataService {
     this.loadAppsAndTags();
   }
 
-  private loadAppsAndTags() {
-    return this.dnnData
+  private loadAppsAndTags(): void {
+    this.dnnData
       .query<{Apps: AppListItem[], Tags: Array<AppListItemTag>}>('AppList')
       .get()
       .subscribe(({Apps, Tags}) => {

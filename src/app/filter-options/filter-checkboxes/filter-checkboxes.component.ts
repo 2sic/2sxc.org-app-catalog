@@ -65,9 +65,6 @@ export class FilterCheckboxesComponent implements OnInit {
       groups.forEach((group: FilterCategoryGroup) => group.Options.forEach(
         (option: FilterOption) => {
           this.checkboxForm.addControl(option.Title, new FormControl(!option.ShowApps));
-          if (option.Id === CheckboxIds.old) {
-            this.filterService.setFilter(option);
-          }
       }));
     });
   }

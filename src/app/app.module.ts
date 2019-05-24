@@ -15,6 +15,7 @@ import {
   MatDividerModule,
   MatChipsModule,
   MatTooltipModule,
+  MatExpansionModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -59,6 +60,7 @@ if (!environment.production) {
     MatDividerModule,
     MatChipsModule,
     MatTooltipModule,
+    MatExpansionModule,
   ],
   providers,
   bootstrap: [AppComponent]

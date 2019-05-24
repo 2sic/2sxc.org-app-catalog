@@ -17,6 +17,8 @@ export class FilterOptionsService {
   public appListFiltered: Subject<AppListItem[]> = new Subject<AppListItem[]>();
 
   constructor(private dataService: DataService) {
+    const selectOnInit = [CheckboxIds.old];
+
     this.dataService.appList.subscribe( (appList: AppListItem[]) => {
       this.appList = appList;
       this.filterAppList(appList);
@@ -25,6 +27,11 @@ export class FilterOptionsService {
       this.tagList = tagList;
       const groups = this.createFilterGroups(tagList, this.appList);
       this.filterGroups.next(groups);
+      selectOnInit.forEach(selectId => {
+        const select = this.tagList.find(tag => tag.Id === selectId );
+        const option = this.createFilterOption(select);
+        this.setFilter(option);
+      });
     });
   }
 
@@ -45,6 +52,10 @@ export class FilterOptionsService {
       {showFitlers: [], hideFilters: []}
     );
 
+    const spliteByCategory = (apps: AppListItem[], category: string) => apps.map(app => app.Tags.some(tag => tag.Category === category));
+    const filterSelective = (apps: AppListItem[]) => apps.filter( app => appHasAllFilters(app, this.selectedFilters) );
+    const filterCumulative = (apps: AppListItem[]) => apps.filter( app => appHasSomeFilters(app, this.selectedFilters) );
+
     const filterApps = (apps: AppListItem[]) => {
 
       // If only Filters with ShowApps=false are selected, show the unselected apps
@@ -56,7 +67,15 @@ export class FilterOptionsService {
       } else {
         const {showFitlers, hideFilters} = splitShowHideFilters(this.selectedFilters);
         const onlyShowApps = apps.filter( app => !appHasSomeFilters(app, hideFilters) );
+
+        // const cumulativeApps, selectiveApps = spliteByCategory(onlyShowApps, 'Release-Type');
+        // const first = cumulativeApps.filter( app => appHasSomeFilters(app, showFitlers) );
+        // const second = first.concat(first);
+        // const
+
+
         const selectedApps = onlyShowApps.filter( app => appHasAllFilters(app, showFitlers) );
+
         return selectedApps;
       }
     };
@@ -68,6 +87,14 @@ export class FilterOptionsService {
 
     this.filterGroups.next(filteredTags);
     this.appListFiltered.next(filteredApps);
+  }
+
+  private filterSelective() {
+
+  }
+
+  private filterCumulative() {
+
   }
 
   private createFilterGroups(tagList: Array<AppListItemTag>, appList: AppListItem[]): FilterCategoryGroup[] {
@@ -124,6 +151,7 @@ export class FilterOptionsService {
 
     if (index > -1) {
       this.selectedFilters.splice(index, 1);
+      console.log(this.selectedFilters);
       this.filterAppList();
     }
   }
