@@ -6,12 +6,12 @@
       <div class="filter-select" [ngClass]="{'firstOrLast': first || last}">
 
         <mat-form-field appearance="outline">
-          <mat-label>{{(titlePrefix + ' ' + selectGroup?.Category).toUpperCase()}}</mat-label>
-          <mat-select [formControlName]="selectGroup?.Category">
-            <mat-option [value]="null">Show all</mat-option>
+          <mat-label>{{(titlePrefix + ' ' + selectGroup?.Category)}}</mat-label>
+          <mat-select [formControlName]="selectGroup?.Category" [compareWith]="isSelected">
+            <mat-option>Show all</mat-option>
 
             <ng-container *ngFor="let option of selectGroup?.Options">
-              <mat-option [value]="option" (onSelectionChange)="handleFilterSelection($event)">{{option?.Tag}}</mat-option>
+              <mat-option [value]="option" (onSelectionChange)="handleFilterSelection($event)" [disabled]="option?.Disabled">{{option?.Tag}}</mat-option>
             </ng-container>
 
           </mat-select>

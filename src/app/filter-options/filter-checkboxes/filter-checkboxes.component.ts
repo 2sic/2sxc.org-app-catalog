@@ -42,7 +42,6 @@ export class FilterCheckboxesComponent implements OnInit {
         map((groups: FilterCategoryGroup[]) => groups.map((group: FilterCategoryGroup) => {
           group.Options.map( (option: FilterOption) => {
             if (option.Id === CheckboxIds.old) {
-              option.ShowApps = false;
               option.Tooltip = option.Tag;
               option.Tag = 'Hide all old Apps';
             }
@@ -66,6 +65,9 @@ export class FilterCheckboxesComponent implements OnInit {
       groups.forEach((group: FilterCategoryGroup) => group.Options.forEach(
         (option: FilterOption) => {
           this.checkboxForm.addControl(option.Title, new FormControl(!option.ShowApps));
+          if (option.Id === CheckboxIds.old) {
+            this.filterService.setFilter(option);
+          }
       }));
     });
   }

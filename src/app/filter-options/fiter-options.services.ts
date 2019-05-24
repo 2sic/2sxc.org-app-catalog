@@ -3,11 +3,14 @@ import { AppListItem, AppListItemTag } from '../app-list/app-list.interfaces';
 import { DataService } from '../data-service/data.service';
 import { FilterCategoryGroup, FilterOption } from './filter-options.interfaces';
 import { Subject } from 'rxjs';
+import { CheckboxIds } from './filter-options.enums';
 
 @Injectable()
 export class FilterOptionsService {
 
   public selectedFilters: FilterOption[] = [];
+
+  private tagList: AppListItemTag[] = [];
   public filterGroups: Subject<FilterCategoryGroup[]> = new Subject<FilterCategoryGroup[]>();
 
   private appList: AppListItem[] = [];
@@ -19,7 +22,8 @@ export class FilterOptionsService {
       this.filterAppList(appList);
     });
     this.dataService.tagList.subscribe( (tagList: AppListItemTag[]) => {
-      const groups = this.createFilterGroups(tagList);
+      this.tagList = tagList;
+      const groups = this.createFilterGroups(tagList, this.appList);
       this.filterGroups.next(groups);
     });
   }
@@ -58,26 +62,34 @@ export class FilterOptionsService {
     };
 
     const filteredApps = this.selectedFilters.length > 0 ? filterApps(appList) : appList;
+    const filteredTags = filteredApps.length > 0 ?
+      this.createFilterGroups(this.tagList, filteredApps)
+      : this.createFilterGroups(this.tagList, this.appList) ;
+
+    this.filterGroups.next(filteredTags);
     this.appListFiltered.next(filteredApps);
   }
 
-  private createFilterGroups(tags: AppListItemTag[]): FilterCategoryGroup[] {
+  private createFilterGroups(tagList: Array<AppListItemTag>, appList: AppListItem[]): FilterCategoryGroup[] {
 
-    const ignoreTags = ['Beta'];
+    const options = tagList.map( (tag: AppListItemTag) => {
+        const disabled = !appList.some( app => !!app.Tags.find(appTag => tag.Id === appTag.Id) );
+        return this.createFilterOption(tag, disabled);
+      });
 
-    return tags.reduce((groups: FilterCategoryGroup[], tag: AppListItemTag) => {
+    return options.reduce((groups: FilterCategoryGroup[], option: FilterOption) => {
 
-      if (ignoreTags.includes(tag.Title)) {
+      const ignoreTags = ['Beta'];
+      if (ignoreTags.includes(option.Title)) {
         return groups;
       }
 
-      const category = groups.find(group => group.Category === tag.Category);
-      const option = this.createFilterOption(tag);
+      const category = groups.find(group => group.Category === option.Category);
 
       if (category) {
         category.Options.push(option);
       } else {
-        const newGroup = {Category: tag.Category, Options: [option]};
+        const newGroup = {Category: option.Category, Options: [option]};
         groups.push(newGroup);
       }
 
@@ -86,9 +98,16 @@ export class FilterOptionsService {
     }, new Array<FilterCategoryGroup>());
   }
 
-  private createFilterOption(tag: AppListItemTag) {
+  private createFilterOption(tag: AppListItemTag, disabled: boolean = false) {
     const {Id, Tag, Title, Category} = tag;
-    return {Id, Tag, Title, Category, ShowApps: true} as FilterOption;
+    let show = true;
+
+    if (Id === CheckboxIds.old) {
+      show = false;
+      disabled = false;
+    }
+
+    return {Id, Tag, Title, Category, Disabled: disabled, ShowApps: show} as FilterOption;
   }
 
   public setFilter(filter: FilterOption) {
@@ -96,9 +115,8 @@ export class FilterOptionsService {
 
     if (!isAlreadyFiltered) {
       this.selectedFilters.push(filter);
+      this.filterAppList();
     }
-
-    this.filterAppList();
   }
 
   public removeFilter(filter: FilterOption) {
@@ -106,8 +124,7 @@ export class FilterOptionsService {
 
     if (index > -1) {
       this.selectedFilters.splice(index, 1);
+      this.filterAppList();
     }
-
-    this.filterAppList();
   }
 }

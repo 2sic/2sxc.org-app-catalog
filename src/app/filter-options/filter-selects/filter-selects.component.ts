@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterCategoryGroup } from '../filter-options.interfaces';
+import { FilterCategoryGroup, FilterOption } from '../filter-options.interfaces';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material';
 import { FilterOptionsService } from '../fiter-options.services';
@@ -28,11 +28,14 @@ export class FilterSelectsComponent implements OnInit {
   }
 
   handleFilterSelection($event: MatOptionSelectionChange) {
-    if ($event.isUserInput) {
+    if ($event.source.selected) {
       this.filterService.setFilter($event.source.value);
     } else {
       this.filterService.removeFilter($event.source.value);
     }
   }
 
+  isSelected(select: FilterOption, option: FilterOption) {
+    return option && option.Id === select.Id;
+  }
 }
