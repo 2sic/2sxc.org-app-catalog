@@ -40,21 +40,21 @@ export class FilterOptionsService {
     const appHasFilter = (app: AppListItem, filter: FilterOption) => app.Tags.some( tag => filter.Id === tag.Id );
     const appHasSomeFilters = (app: AppListItem, filters: FilterOption[]) => filters.some( filter => appHasFilter(app, filter) );
     const appHasAllFilters = (app: AppListItem, filters: FilterOption[]) => filters.every( filter => appHasFilter(app, filter) );
-    const splitShowHideFilters = (filters: FilterOption[]) => filters.reduce(
+    const splitFilters = (filters: FilterOption[]) => filters.reduce(
       (obj, filter) => {
-        if (filter.ShowApps) {
+        if ( filter.ShowApps && !Object.values(CheckboxIds).includes(filter.Id) ) {
           obj.showFitlers.push(filter);
-        } else {
+        }
+        if (!filter.ShowApps) {
           obj.hideFilters.push(filter);
+        }
+        if ( filter.ShowApps && Object.values(CheckboxIds).includes(filter.Id) ) {
+          obj.checkboxFilters.push(filter);
         }
         return obj;
       },
-      {showFitlers: [], hideFilters: []}
+      {showFitlers: [], hideFilters: [], checkboxFilters: []}
     );
-
-    const spliteByCategory = (apps: AppListItem[], category: string) => apps.map(app => app.Tags.some(tag => tag.Category === category));
-    const filterSelective = (apps: AppListItem[]) => apps.filter( app => appHasAllFilters(app, this.selectedFilters) );
-    const filterCumulative = (apps: AppListItem[]) => apps.filter( app => appHasSomeFilters(app, this.selectedFilters) );
 
     const filterApps = (apps: AppListItem[]) => {
 
@@ -62,19 +62,17 @@ export class FilterOptionsService {
       const showUnselected = this.selectedFilters.every(filter => !filter.ShowApps);
 
       if (showUnselected) {
+
         const unselectedApps = apps.filter( app => !appHasSomeFilters(app, this.selectedFilters) );
         return unselectedApps;
+
       } else {
-        const {showFitlers, hideFilters} = splitShowHideFilters(this.selectedFilters);
+
+        const {showFitlers, hideFilters, checkboxFilters} = splitFilters(this.selectedFilters);
+
         const onlyShowApps = apps.filter( app => !appHasSomeFilters(app, hideFilters) );
-
-        // const cumulativeApps, selectiveApps = spliteByCategory(onlyShowApps, 'Release-Type');
-        // const first = cumulativeApps.filter( app => appHasSomeFilters(app, showFitlers) );
-        // const second = first.concat(first);
-        // const
-
-
-        const selectedApps = onlyShowApps.filter( app => appHasAllFilters(app, showFitlers) );
+        const checkboxApps = onlyShowApps.filter( app => appHasSomeFilters(app, checkboxFilters) );
+        const selectedApps = checkboxApps.filter( app => appHasAllFilters(app, showFitlers) );
 
         return selectedApps;
       }
@@ -87,14 +85,6 @@ export class FilterOptionsService {
 
     this.filterGroups.next(filteredTags);
     this.appListFiltered.next(filteredApps);
-  }
-
-  private filterSelective() {
-
-  }
-
-  private filterCumulative() {
-
   }
 
   private createFilterGroups(tagList: Array<AppListItemTag>, appList: AppListItem[]): FilterCategoryGroup[] {
