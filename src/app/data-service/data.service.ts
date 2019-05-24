@@ -7,6 +7,7 @@ import { AppListItem, AppListItemTag } from '../app-list/app-list.interfaces';
 @Injectable()
 export class DataService {
 
+  // to learn: discuss how to do this without subjects
   public appList: Subject<AppListItem[]> = new Subject<AppListItem[]>();
   public tagList: Subject<AppListItemTag[]> = new Subject<AppListItemTag[]>();
 

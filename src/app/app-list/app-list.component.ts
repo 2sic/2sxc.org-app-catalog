@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AppListItem } from './app-list.interfaces';
+import { AppListItem, AppListItemTag } from './app-list.interfaces';
 import { FilterOptionsService } from '../filter-options/fiter-options.services';
 import { AppTypeIds } from './app-list.enums';
 import * as moment from 'moment';
@@ -21,14 +21,21 @@ export class AppListComponent implements OnInit {
     this.appList = this.filterService.appListFiltered
       .pipe(
         map((appList: AppListItem[]) => categorize(appList)),
-        map((appList: AppListItem[]) => sortByUpdateDate(appList)),
-        map((appList: AppListItem[]) => sortByType(appList)),
+        map((appList: AppListItem[]) => sortByTypeWeightAndDate(appList)),
       );
   }
 }
 
 
 function categorize(apps: AppListItem[]) {
+  const emptyType: AppListItemTag = {
+    Weight: 0,
+    Category: '',
+    Id: 0,
+    Tag: '',
+    Title: ''
+  };
+
   return apps
     .map(app => {
       app.IsNew = moment().subtract(2, 'month').isSameOrBefore( moment(app.Updated), 'day' );
@@ -36,43 +43,41 @@ function categorize(apps: AppListItem[]) {
       const hasTop = app.Tags.find(tag => tag.Id === AppTypeIds.top);
       if (!!hasTop) {
         app.Type = hasTop;
+        app.Type.Weight = 200;
         return app;
       }
 
       const hasStable = app.Tags.find(tag => tag.Id === AppTypeIds.stable);
       if (!!hasStable) {
         app.Type = hasStable;
+        app.Type.Weight = 100;
         return app;
       }
 
       const hasOld = app.Tags.find(tag => tag.Id === AppTypeIds.old);
       if (!!hasOld) {
         app.Type = hasOld;
+        app.Type.Weight = -1;
         return app;
       }
 
+      app.Type = emptyType;
       return app;
     });
 }
 
-function sortByType(apps: AppListItem[]) {
-  return apps
-    .map((app: AppListItem, index: number) => {
-      const sortValue = !app.Type ? 4
-        : app.Type.Id === AppTypeIds.new ? 1
-          : app.Type.Id === AppTypeIds.top ? 2
-            : app.Type.Id === AppTypeIds.stable ? 3
-              : 4;
-      return { index, sortValue };
-    })
-    .sort( (a, b) => a.sortValue - b.sortValue )
-    .map( sortItem => apps[sortItem.index] );
-}
+function sortByTypeWeightAndDate(apps: AppListItem[]) {
 
-function sortByUpdateDate(apps: AppListItem[]) {
-  const isAfter = (c: AppListItem, d: AppListItem) => moment(c.Updated).isAfter( moment(d.Updated) );
-  const isSame = (c: AppListItem, d: AppListItem) => moment(c.Updated).isSame( moment(d.Updated) );
-  const sortDate = (c: AppListItem, d: AppListItem) => +(isAfter(c, d)) || +(isSame(c, d)) - 1;
+  return apps.sort( (a, b) => {
+    const aDate = moment(a.Updated);
+    const bDate = moment(b.Updated);
+    const validDates = !!a.Updated && !!b.Updated;
+    const dateWeight = validDates ?
+      ( +(bDate.isAfter(aDate)) || +(bDate.isSame(aDate)) - 1 ) : -1;
 
-  return apps.sort( (a, b) => sortDate(a, b) );
+    const aWeight = +(a.IsNew) + a.Type.Weight;
+    const bWeight = +(b.IsNew) + b.Type.Weight + dateWeight;
+
+    return bWeight - aWeight;
+  });
 }

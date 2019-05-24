@@ -4,7 +4,7 @@ export interface AppListItemTag {
   Title: string;
   Tag: string;
   Category: string;
-  Priority: number;
+  Weight: number;
 }
 
 export interface AppListItem {
