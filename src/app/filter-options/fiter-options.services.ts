@@ -71,7 +71,9 @@ export class FilterOptionsService {
         const {showFitlers, hideFilters, checkboxFilters} = splitFilters(this.selectedFilters);
 
         const onlyShowApps = apps.filter( app => !appHasSomeFilters(app, hideFilters) );
-        const checkboxApps = onlyShowApps.filter( app => appHasSomeFilters(app, checkboxFilters) );
+        const checkboxApps = checkboxFilters.length > 0 ?
+          onlyShowApps.filter( app => appHasSomeFilters(app, checkboxFilters) )
+          : onlyShowApps;
         const selectedApps = checkboxApps.filter( app => appHasAllFilters(app, showFitlers) );
 
         return selectedApps;
@@ -141,7 +143,6 @@ export class FilterOptionsService {
 
     if (index > -1) {
       this.selectedFilters.splice(index, 1);
-      console.log(this.selectedFilters);
       this.filterAppList();
     }
   }

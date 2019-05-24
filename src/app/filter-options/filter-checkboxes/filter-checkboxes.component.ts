@@ -42,17 +42,16 @@ export class FilterCheckboxesComponent implements OnInit {
         map((groups: FilterCategoryGroup[]) => groups.map((group: FilterCategoryGroup) => {
           group.Options.map( (option: FilterOption) => {
             if (option.Id === CheckboxIds.old) {
-              option.Tooltip = option.Tag;
               option.Tag = 'Hide all old Apps';
             }
 
             if (option.Id === CheckboxIds.stabel) {
-              option.Tooltip = option.Tag;
+              option.Tooltip = option.Title;
               option.Tag = 'Stable';
             }
 
             if (option.Id === CheckboxIds.template) {
-              option.Tooltip = option.Tag;
+              option.Tooltip = option.Title;
               option.Tag = 'Template';
             }
 

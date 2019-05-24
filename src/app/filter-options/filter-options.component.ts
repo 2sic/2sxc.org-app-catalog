@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FilterCategoryGroup, FilterOption } from './filter-options.interfaces';
+import { FilterCategoryGroup } from './filter-options.interfaces';
 import { FilterOptionsService } from './fiter-options.services';
 
 @Component({

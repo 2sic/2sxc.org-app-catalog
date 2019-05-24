@@ -26,7 +26,6 @@ export class AppListComponent implements OnInit {
   }
 }
 
-
 function categorize(apps: AppListItem[]) {
   const emptyType: AppListItemTag = {
     Weight: 0,
